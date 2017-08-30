@@ -1,12 +1,21 @@
 version: '3.2'
 
 services:
-  mailer:
+  portainer:
     image: portainer/portainer:1.14.0
     ports:
       - "9000:9000"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+      - type: volume #To persist portainer datas
+        source: portainer_data
+        target: "/data"
     deploy:
       restart_policy:
         condition: on-failure
+
+volumes:
+    portainer_data:
